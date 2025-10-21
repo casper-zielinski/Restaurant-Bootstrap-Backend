@@ -1,0 +1,29 @@
+### GET request to example server
+GET http://localhost:8080/api/Reservations
+
+###
+POST http://localhost:8080/api/Reservations
+Content-Type: application/json
+
+{
+  "id": "r4",
+  "time": "adad",
+  "date": "dadad",
+  "price": 200,
+  "tables": [true, false, true, false]
+}
+
+###
+POST http://localhost:8080/api/Reservations
+Content-Type: application/json
+
+{
+  "id": "r5",
+  "time": "adad",
+  "date": "dadad",
+  "price": 2200,
+  "tables": [true, false, true, false, true, false]
+}
+
+###
+GET http://localhost:8080/api/Reservations/r5
