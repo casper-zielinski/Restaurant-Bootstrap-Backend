@@ -9,18 +9,22 @@ import org.hibernate.type.SqlTypes;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Entity class representing a restaurant reservation.
+ * Stores reservation details including time, date, price, and table assignments.
+ */
 @Entity
 public class Reservation {
     @Id private String id;
     private String time;
     private String date;
     private Integer price;
+    // Stored as JSON to allow frontend to send array and store as list in backend
     @Column(columnDefinition = "JSON")
     @JdbcTypeCode(SqlTypes.JSON)
-    private List<Boolean> tables; //um es als JSON zu speichern,
-    // damit Frontend array schicken kann und als Liste
-    // im Backend gespeichert wird
+    private List<Boolean> tables;
 
+    /** Default constructor required by JPA */
     public Reservation() {}
 
     public Reservation(String id, String time, String date, Integer price, List<Boolean> tables) {

@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing restaurant reservations.
+ * Provides API endpoints for retrieving and creating reservations.
+ */
 @RestController
 @RequestMapping("api/Reservations")
+@CrossOrigin(origins = "http://localhost:3000") // Allow requests from frontend
 public class ReservationService {
 
     private ReservationRepository repository;
@@ -16,11 +21,20 @@ public class ReservationService {
         this.repository = repository;
     }
 
+    /**
+     * Retrieves all reservations from the database.
+     * @return List of all reservations
+     */
     @GetMapping
     public ResponseEntity<List<Reservation>> getAllReservations() {
         return ResponseEntity.ok(repository.findAll());
     }
 
+    /**
+     * Retrieves a specific reservation by its ID.
+     * @param id The reservation ID to search for
+     * @return The reservation if found, otherwise 404 Not Found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getReservations(@PathVariable String id) {
         return repository.findById(id)
@@ -28,6 +42,11 @@ public class ReservationService {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Creates a new reservation in the database.
+     * @param reservation The reservation data to save
+     * @return The saved reservation, or error message on failure
+     */
     @PostMapping
     public ResponseEntity<?> addReservation(@RequestBody Reservation reservation) {
         try {
