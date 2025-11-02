@@ -12,7 +12,11 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/Reservations")
-@CrossOrigin(origins = "http://localhost:3000") // Allow requests from frontend
+@CrossOrigin(origins =
+        {
+        "http://localhost:3000",
+        "https://restaurant-bootstrap-gamma.vercel.app"
+        }) // Allow requests from frontend
 public class ReservationService {
 
     private ReservationRepository repository;
