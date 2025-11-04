@@ -3,9 +3,12 @@ package com.tavernaluna.backend;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,11 +18,23 @@ import java.util.Objects;
  */
 @Entity
 public class Reservation {
-    @Id private String id;
-    private String time;
-    private String date;
+    @Id
+    @NotBlank(message = "ID darf nicht leer sein")
+    private String id;
+
+    @NotBlank(message = "Zeit darf nicht leer sein")
+    private LocalTime time;
+
+    @NotBlank(message = "Datum darf nicht leer sein")
+    private LocalDate date;
+
+    @NotNull(message = "Preis darf nicht null sein")
+    @Min(value = 0, message = "Preis muss positiv sein")
+    @Size(min = 1, message = "Mindestens ein Tisch muss ausgewählt werden")
     private Integer price;
+
     // Stored as JSON to allow frontend to send array and store as list in backend
+    @NotNull(message = "Tische dürfen nicht null sein")
     @Column(columnDefinition = "JSON")
     @JdbcTypeCode(SqlTypes.JSON)
     private List<Boolean> tables;
@@ -27,7 +42,7 @@ public class Reservation {
     /** Default constructor required by JPA */
     public Reservation() {}
 
-    public Reservation(String id, String time, String date, Integer price, List<Boolean> tables) {
+    public Reservation(String id, LocalTime time, LocalDate date, Integer price, List<Boolean> tables) {
         this.id = id;
         this.time = time;
         this.date = date;
@@ -43,19 +58,19 @@ public class Reservation {
         this.id = id;
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
