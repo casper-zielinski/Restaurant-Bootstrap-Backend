@@ -22,19 +22,18 @@ public class Reservation {
     @NotBlank(message = "ID darf nicht leer sein")
     private String id;
 
-    @NotBlank(message = "Zeit darf nicht leer sein")
+    @NotNull(message = "Zeit darf nicht leer sein")
     private LocalTime time;
 
-    @NotBlank(message = "Datum darf nicht leer sein")
+    @NotNull(message = "Datum darf nicht leer sein")
     private LocalDate date;
 
     @NotNull(message = "Preis darf nicht null sein")
     @Min(value = 0, message = "Preis muss positiv sein")
-    @Size(min = 1, message = "Mindestens ein Tisch muss ausgewählt werden")
     private Integer price;
 
     // Stored as JSON to allow frontend to send array and store as list in backend
-    @NotNull(message = "Tische dürfen nicht null sein")
+    @NotNull(message = "Tische Array darf nicht null sein")
     @Column(columnDefinition = "JSON")
     @JdbcTypeCode(SqlTypes.JSON)
     private List<Boolean> tables;

@@ -55,7 +55,7 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<?> addReservation(@Valid @RequestBody Reservation reservation) {
         try {
-            return ResponseEntity.ok(service.createReservation(reservation));
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.createReservation(reservation));
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
