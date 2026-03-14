@@ -31,11 +31,11 @@ public class Reservation {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = true, unique = true)
+    @Column(nullable = true)
     @Email
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Pattern(regexp = "^[+]?[0-9\\s\\-/()]+$")  // Optional: Format-Validation
     private String phoneNumber;
 
