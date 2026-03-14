@@ -28,9 +28,20 @@ public class Reservation {
     @NotNull(message = "Datum darf nicht leer sein")
     private LocalDate date;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = true, unique = true)
+    @Email
+    private String email;
+
+    @Column(nullable = false, unique = true)
+    @Pattern(regexp = "^[+]?[0-9\\s\\-/()]+$")  // Optional: Format-Validation
+    private String phoneNumber;
+
     @NotNull(message = "Preis darf nicht null sein")
     @Min(value = 0, message = "Preis muss positiv sein")
-    private Integer price;
+    private Double price;
 
     // Stored as JSON to allow frontend to send array and store as list in backend
     @NotNull(message = "Tische Array darf nicht null sein")
@@ -38,13 +49,19 @@ public class Reservation {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<Boolean> tables;
 
-    /** Default constructor required by JPA */
-    public Reservation() {}
+    /**
+     * Default constructor required by JPA
+     */
+    public Reservation() {
+    }
 
-    public Reservation(String id, LocalTime time, LocalDate date, Integer price, List<Boolean> tables) {
+    public Reservation(String id, LocalTime time, String name, LocalDate date, String email, String phoneNumber, Double price, List<Boolean> tables) {
         this.id = id;
         this.time = time;
+        this.name = name;
         this.date = date;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.price = price;
         this.tables = tables;
     }
@@ -73,11 +90,11 @@ public class Reservation {
         this.date = date;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -89,13 +106,37 @@ public class Reservation {
         this.tables = tables;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
         return Objects.equals(id, that.id) &&
-               Objects.equals(time, that.time) && Objects.equals(date, that.date) &&
-               Objects.equals(price, that.price) && Objects.equals(tables, that.tables);
+                Objects.equals(time, that.time) && Objects.equals(date, that.date) &&
+                Objects.equals(price, that.price) && Objects.equals(tables, that.tables);
     }
 
     @Override

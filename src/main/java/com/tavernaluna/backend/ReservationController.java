@@ -12,12 +12,7 @@ import java.util.List;
  * Provides API endpoints for retrieving and creating reservations.
  */
 @RestController
-@RequestMapping("/api/reservations")
-@CrossOrigin(origins =
-        {
-        "http://localhost:3000",
-        "https://restaurant-bootstrap-gamma.vercel.app"
-        }) // Allow requests from frontend
+@RequestMapping("/reservations")
 public class ReservationController {
 
     private final ReservationService service;

@@ -1,5 +1,6 @@
 package com.tavernaluna.backend;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -7,13 +8,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${FRONTEND_URL}")
+    private String FRONTEND_URL;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
+        registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:3000",
-                        "http://localhost:5173",
-                        "https://restaurant-bootstrap-gamma.vercel.app/"
+                        FRONTEND_URL,
+                        "https://restaurant-bootstrap-gamma.vercel.app"
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")

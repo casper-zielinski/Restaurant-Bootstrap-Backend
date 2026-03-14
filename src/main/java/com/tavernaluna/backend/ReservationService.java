@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public class ReservationService {
 
-    private final  ReservationRepository repository;
+    private final ReservationRepository repository;
     public ReservationService(ReservationRepository repository) {
         this.repository = repository;
     }
@@ -21,6 +21,10 @@ public class ReservationService {
 
     public Optional<Reservation> getReservationById(String id) {
         return repository.findById(id);
+    }
+
+    public List<Reservation> getReservationByName(String name) {
+        return repository.findByName(name);
     }
 
     public Reservation createReservation(Reservation reservation) {

@@ -2,14 +2,12 @@ package com.tavernaluna.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Main application class for the Taverna Luna restaurant backend.
  * This serves as the entry point for the Spring Boot application.
  */
 @SpringBootApplication
-@RestController
 public class BackendApplication {
 
     /**
