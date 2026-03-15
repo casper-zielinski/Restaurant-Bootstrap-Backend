@@ -1,4 +1,5 @@
 package com.tavernaluna.backend;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 public class ReservationService {
 
     private final ReservationRepository repository;
+
     public ReservationService(ReservationRepository repository) {
         this.repository = repository;
     }
@@ -19,12 +21,12 @@ public class ReservationService {
         return repository.findAll();
     }
 
-    public Optional<Reservation> getReservationById(String id) {
+    public Optional<Reservation> getReservationsById(String id) {
         return repository.findById(id);
     }
 
-    public List<Reservation> getReservationByName(String name) {
-        return repository.findByName(name);
+    public List<Reservation> getReservationsByUserId(String userId) {
+        return repository.findByUserId(userId);
     }
 
     public Reservation createReservation(Reservation reservation) {

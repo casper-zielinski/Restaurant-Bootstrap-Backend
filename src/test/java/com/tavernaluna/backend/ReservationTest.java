@@ -21,7 +21,7 @@ class ReservationTest {
 
     @Test
     void reservationSerializationTest() throws IOException {
-        Reservation reservation = new Reservation("r5", LocalTime.MIN, "Casper Zielinski", LocalDate.EPOCH, null, "+43 343435 3553434 434", 12.22, List.of(true, true, false));
+        Reservation reservation = new Reservation("r5", LocalTime.MIN, "Casper Zielinski", LocalDate.EPOCH, null, "+43 343435 3553434 434", 12.22, List.of(true, true, false), "123-345");
         assertThat(json.write(reservation)).isStrictlyEqualToJson("expected.json");
         assertThat(json.write(reservation)).hasJsonPathArrayValue("@.tables");
     }

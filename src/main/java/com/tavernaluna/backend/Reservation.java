@@ -31,7 +31,7 @@ public class Reservation {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = true)
+    @Column()
     @Email
     private String email;
 
@@ -42,6 +42,9 @@ public class Reservation {
     @NotNull(message = "Preis darf nicht null sein")
     @Min(value = 0, message = "Preis muss positiv sein")
     private Double price;
+
+    @Column
+    private String userId;
 
     // Stored as JSON to allow frontend to send array and store as list in backend
     @NotNull(message = "Tische Array darf nicht null sein")
@@ -55,7 +58,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(String id, LocalTime time, String name, LocalDate date, String email, String phoneNumber, Double price, List<Boolean> tables) {
+    public Reservation(String id, LocalTime time, String name, LocalDate date, String email, String phoneNumber, Double price, List<Boolean> tables, String userId) {
         this.id = id;
         this.time = time;
         this.name = name;
@@ -64,6 +67,7 @@ public class Reservation {
         this.phoneNumber = phoneNumber;
         this.price = price;
         this.tables = tables;
+        this.userId = userId;
     }
 
     public String getId() {
@@ -128,6 +132,14 @@ public class Reservation {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override
