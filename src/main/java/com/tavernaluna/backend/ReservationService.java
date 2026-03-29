@@ -17,10 +17,6 @@ public class ReservationService {
         this.repository = repository;
     }
 
-    public List<Reservation> getAllReservations() {
-        return repository.findAll();
-    }
-
     public Optional<Reservation> getReservationsById(String id) {
         return repository.findById(id);
     }

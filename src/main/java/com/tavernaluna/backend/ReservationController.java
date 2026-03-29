@@ -1,5 +1,6 @@
 package com.tavernaluna.backend;
 
+import com.tavernaluna.backend.DTO.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -30,8 +32,15 @@ public class ReservationController {
      * @return List of all reservations
      */
     @GetMapping
-    public ResponseEntity<List<@Valid Reservation>> getAllReservations(@CookieValue(value = "userId") String userId) {
-        return ResponseEntity.ok(service.getReservationsByUserId(userId));
+    public ResponseEntity<ApiResponse<List<Reservation>>> getAllUserReservations(@CookieValue(value = "userId") String userId) {
+        try {
+            List<Reservation> userReservations = service.getReservationsByUserId(userId);
+            return ResponseEntity.ok(ApiResponse.ok("Successfully fetched User Reservations", userReservations));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse
+                            .error("Error fetching User Reservations", null, e.getMessage()));
+        }
     }
 
     /**
@@ -41,10 +50,18 @@ public class ReservationController {
      * @return The reservation if found, otherwise 404 Not Found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getReservations(@PathVariable String id) {
-        return service.getReservationsById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ApiResponse<Reservation>> getOneReservation(@PathVariable String id) {
+        try {
+            Optional<Reservation> reservation = service.getReservationsById(id);
+            if (reservation.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(String.format("Reservation with id:%s does not exist", id), null));
+            } else {
+                return ResponseEntity.ok(ApiResponse.ok(String.format("Successfully fetched reservation with id:%s", id), reservation.get()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error(String.format("Error fetching Reservation with id:%s", id), null, e.getMessage()));
+        }
+
     }
 
     /**
@@ -54,7 +71,7 @@ public class ReservationController {
      * @return The saved reservation, or error message on failure
      */
     @PostMapping
-    public ResponseEntity<?> addReservation(@Valid @RequestBody Reservation reservation, HttpServletResponse response, @CookieValue(value = "userId", required = false) String userId) {
+    public ResponseEntity<ApiResponse<Reservation>> addReservation(@Valid @RequestBody Reservation reservation, HttpServletResponse response, @CookieValue(value = "userId", required = false) String userId) {
         try {
             if (userId == null) {
                 String id = UUID.randomUUID().toString();
@@ -64,10 +81,10 @@ public class ReservationController {
             } else {
                 reservation.setUserId(userId);
             }
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.createReservation(reservation));
+            Reservation createdReservation = service.createReservation(reservation);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok("Successfully created new reservation", createdReservation));
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Error creating new reservation", null, e.getMessage()));
         }
     }
 }
