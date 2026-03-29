@@ -1,8 +1,11 @@
 package com.tavernaluna.backend.DTO;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Optional;
 
-public record ApiResponse<T>(boolean success, String message, T data, Optional<String> errorMessage) {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record ApiResponse<T>(boolean success, String message, T data, String errorMessage) {
     public static <T> ApiResponse<T> ok(String message, T data) {
         return new ApiResponse<>(true, message, data, null);
     }
@@ -12,6 +15,6 @@ public record ApiResponse<T>(boolean success, String message, T data, Optional<S
     }
 
     public static <T> ApiResponse<T> error(String message, T data, String errorMessage) {
-        return new ApiResponse<>(false, message, data, Optional.of(errorMessage));
+        return new ApiResponse<>(false, message, data, errorMessage);
     }
 }

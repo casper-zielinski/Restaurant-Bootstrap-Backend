@@ -32,14 +32,15 @@ public class ReservationController {
      * @return List of all reservations
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Reservation>>> getAllUserReservations(@CookieValue(value = "userId") String userId) {
+    public ResponseEntity<ApiResponse<List<Reservation>>> getAllUserReservations(@CookieValue(value = "userId", required = false) String userId) {
         try {
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.<List<Reservation>>error("No user session found", null));
+            }
             List<Reservation> userReservations = service.getReservationsByUserId(userId);
             return ResponseEntity.ok(ApiResponse.ok("Successfully fetched User Reservations", userReservations));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse
-                            .error("Error fetching User Reservations", null, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.<List<Reservation>>error("Error fetching User Reservations", null, e.getMessage()));
         }
     }
 
@@ -54,12 +55,12 @@ public class ReservationController {
         try {
             Optional<Reservation> reservation = service.getReservationsById(id);
             if (reservation.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(String.format("Reservation with id:%s does not exist", id), null));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.<Reservation>error(String.format("Reservation with id:%s does not exist", id), null));
             } else {
                 return ResponseEntity.ok(ApiResponse.ok(String.format("Successfully fetched reservation with id:%s", id), reservation.get()));
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error(String.format("Error fetching Reservation with id:%s", id), null, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.<Reservation>error(String.format("Error fetching Reservation with id:%s", id), null, e.getMessage()));
         }
 
     }
@@ -84,7 +85,7 @@ public class ReservationController {
             Reservation createdReservation = service.createReservation(reservation);
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok("Successfully created new reservation", createdReservation));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Error creating new reservation", null, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.<Reservation>error("Error creating new reservation", null, e.getMessage()));
         }
     }
 }
