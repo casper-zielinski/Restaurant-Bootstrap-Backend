@@ -17,7 +17,6 @@ class JsonSerializeTest {
     private final String testFile = "expected.json";
     private final String testFileNoUserID = "noUserId.json";
 
-
     @Autowired
     private JacksonTester<Reservation> json;
 
@@ -52,7 +51,6 @@ class JsonSerializeTest {
         assertThat(reservation.getId()).isEqualTo("r5");
         assertThat(reservation.getTime()).isEqualTo(LocalTime.MIN);
     }
-
 
     @Test
     void reservationDeserializationTestWithNoUserId() throws Exception {

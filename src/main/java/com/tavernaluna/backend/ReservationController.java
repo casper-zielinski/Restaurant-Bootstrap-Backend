@@ -1,5 +1,6 @@
 package com.tavernaluna.backend;
 
+import com.tavernaluna.backend.Constants.CookieConstants;
 import com.tavernaluna.backend.DTO.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,7 +77,7 @@ public class ReservationController {
         try {
             if (userId == null) {
                 String id = UUID.randomUUID().toString();
-                Cookie cookie = new Cookie("userId", id);
+                Cookie cookie = new Cookie(CookieConstants.userId, id);
                 reservation.setUserId(id);
                 response.addCookie(cookie);
             } else {

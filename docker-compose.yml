@@ -1,7 +1,8 @@
+name: "taverna-luna"
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: tavernaluna-db
+    container_name: taverna-luna-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${PGPASSWORD}
