@@ -3,6 +3,7 @@ package com.tavernaluna.backend;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -17,8 +18,8 @@ public class ReservationService {
         this.repository = repository;
     }
 
-    public Optional<Reservation> getReservationsById(String id) {
-        return repository.findById(id);
+    public Optional<Reservation> getReservationsById(String id, String userId) {
+        return repository.findById(id).filter(reservation -> reservation.getUserId().equals(userId));
     }
 
     public List<Reservation> getReservationsByUserId(String userId) {

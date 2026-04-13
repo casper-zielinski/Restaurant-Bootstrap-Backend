@@ -52,9 +52,12 @@ public class ReservationController {
      * @return The reservation if found, otherwise 404 Not Found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Reservation>> getOneReservation(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Reservation>> getOneReservation(@CookieValue(value = "userId", required = false) String userId, @PathVariable String id) {
         try {
-            Optional<Reservation> reservation = service.getReservationsById(id);
+            if (userId == null || userId.isBlank()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.<Reservation>error("No user session found", null));
+            }
+            Optional<Reservation> reservation = service.getReservationsById(id, userId);
             if (reservation.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.<Reservation>error(String.format("Reservation with id:%s does not exist", id), null));
             } else {
@@ -63,7 +66,6 @@ public class ReservationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.<Reservation>error(String.format("Error fetching Reservation with id:%s", id), null, e.getMessage()));
         }
-
     }
 
     /**
